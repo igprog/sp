@@ -27,6 +27,7 @@
                         <th>Telefon</th>
                         <th>Istek članarine</th>
                         <th>Plaćeno</th>
+                        <th>Napomena</th>
                         <th>Profil</th>
                         <th>Briši</th>
                     </tr>
@@ -44,6 +45,9 @@
                         <td ng-click="showClient(x)">
                             <i ng-if="x.isDebtor==0" class="fa fa-check text-success" aria-hidden="true"></i>
                             <i ng-if="x.isDebtor>0" class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
+                        </td>
+                        <td>
+                            {{x.note}}
                         </td>
                         <td>
                             <button ng-click="showClient(x)" class="btn btn-default"><span class="fa fa-cogs" style="color:green"></span></button>

@@ -31,6 +31,7 @@ public class Clients : System.Web.Services.WebService {
         public int isActive { get; set; }
         public int isDebtor { get; set; }
         public DateTime? expirationService { get; set; }
+        public String note { get; set; }
     }
 
     [WebMethod]
@@ -45,6 +46,7 @@ public class Clients : System.Web.Services.WebService {
         client.isActive = 1;
         client.isDebtor = 0;
         client.expirationService = DateTime.UtcNow;
+        client.note = "";
         string json = JsonConvert.SerializeObject(client, Formatting.Indented);
         return json;
     }
@@ -53,12 +55,12 @@ public class Clients : System.Web.Services.WebService {
     public string Load() {
         try {
             connection.Open();
-            string sql = @"SELECT DISTINCT c.ClientId, c.FirstName, c.LastName, c.Email, c.Phone, c.ActivationDate, c.IsActive, Count(cs.IsPaid), cs1.ExpirationDate  FROM Clients AS c
+            string sql = @"SELECT DISTINCT c.ClientId, c.FirstName, c.LastName, c.Email, c.Phone, c.ActivationDate, c.IsActive, Count(cs.IsPaid), cs1.ExpirationDate, c.Note FROM Clients AS c
                         LEFT OUTER JOIN ClientServices AS cs
                         ON c.ClientId = cs.ClientId AND cs.IsPaid = 0
                         LEFT OUTER JOIN ClientServices AS cs1
                         ON c.ClientId = cs1.ClientId AND cs1.ExpirationDate >= GETDATE()
-                        GROUP BY c.ClientId, c.FirstName, c.LastName, c.Email, c.Phone, c.ActivationDate, c.IsActive, cs1.ExpirationDate
+                        GROUP BY c.ClientId, c.FirstName, c.LastName, c.Email, c.Phone, c.ActivationDate, c.IsActive, cs1.ExpirationDate, c.Note
                         ORDER BY cs1.ExpirationDate DESC";
             SqlCommand command = new SqlCommand(sql, connection);
             SqlDataReader reader = command.ExecuteReader();
@@ -74,6 +76,7 @@ public class Clients : System.Web.Services.WebService {
                 x.isActive = reader.GetValue(6) == DBNull.Value ? 1 : reader.GetInt32(6);
                 x.isDebtor = reader.GetInt32(7) > 0 ? 1 : 0;
                 x.expirationService = reader.GetValue(8) == DBNull.Value ? DateTime.UtcNow : reader.GetDateTime(8);
+                x.note = reader.GetValue(9) == DBNull.Value ? "" : reader.GetString(9);
                 xx.Add(x);
             }
             connection.Close();
@@ -100,6 +103,7 @@ public class Clients : System.Web.Services.WebService {
                 command.Parameters.Add(new SqlParameter("Phone", client.phone));
                 command.Parameters.Add(new SqlParameter("ActivationDate", client.activationDate));
                 command.Parameters.Add(new SqlParameter("IsActive", client.isActive));
+                command.Parameters.Add(new SqlParameter("Note", client.note));
                 command.ExecuteNonQuery();
                 connection.Close();
                 return ("Registracija uspješna.");
@@ -112,7 +116,7 @@ public class Clients : System.Web.Services.WebService {
         try {
             connection.Open();
             string sql = @"UPDATE Clients SET  
-                        FirstName = @FirstName, LastName = @LastName, Email = @Email, Phone = @Phone, ActivationDate = @ActivationDate, IsActive = @IsActive
+                        FirstName = @FirstName, LastName = @LastName, Email = @Email, Phone = @Phone, ActivationDate = @ActivationDate, IsActive = @IsActive, Note = @Note
                         WHERE ClientId = @ClientId";
             SqlCommand command = new SqlCommand(sql, connection);
             command.Parameters.Add(new SqlParameter("ClientId", client.clientId));
@@ -122,6 +126,7 @@ public class Clients : System.Web.Services.WebService {
             command.Parameters.Add(new SqlParameter("Phone", client.phone));
             command.Parameters.Add(new SqlParameter("ActivationDate", client.activationDate));
             command.Parameters.Add(new SqlParameter("IsActive", client.isActive));
+            command.Parameters.Add(new SqlParameter("Note", client.note));
             command.ExecuteNonQuery();
             connection.Close();
             return ("Spremljeno.");
@@ -148,20 +153,21 @@ public class Clients : System.Web.Services.WebService {
     public string GetClient(Int32 clientId) {
         try {
         connection.Open();
-        SqlCommand command = new SqlCommand("SELECT ClientId, FirstName, LastName, Email, Phone, ActivationDate, IsActive FROM Clients WHERE ClientId = @ClientId", connection);
+        SqlCommand command = new SqlCommand("SELECT ClientId, FirstName, LastName, Email, Phone, ActivationDate, IsActive, Note FROM Clients WHERE ClientId = @ClientId", connection);
         command.Parameters.Add(new SqlParameter("ClientId", clientId));
         NewClient xx = new NewClient();
         SqlDataReader reader = command.ExecuteReader();
-        while (reader.Read()) {
-            xx.clientId = reader.GetInt32(0);
-            xx.firstName = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-            xx.lastName = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-            xx.email = reader.GetValue(3) == DBNull.Value ? "" : reader.GetString(3);
-            xx.phone = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
-            xx.activationDate = reader.GetDateTime(5);
-            xx.isActive = reader.GetValue(6) == DBNull.Value ? 1 : reader.GetInt32(6);
-        }
-        connection.Close();
+            while (reader.Read()) {
+                xx.clientId = reader.GetInt32(0);
+                xx.firstName = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+                xx.lastName = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
+                xx.email = reader.GetValue(3) == DBNull.Value ? "" : reader.GetString(3);
+                xx.phone = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
+                xx.activationDate = reader.GetDateTime(5);
+                xx.isActive = reader.GetValue(6) == DBNull.Value ? 1 : reader.GetInt32(6);
+                xx.note = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
+            }
+            connection.Close();
         string json = JsonConvert.SerializeObject(xx, Formatting.Indented);
         return json;
         } catch (Exception e) { return ("Error: " + e); }
