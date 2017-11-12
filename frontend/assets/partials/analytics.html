@@ -43,6 +43,29 @@
                 <li ng-class="currTpl=='checkInsTpl'?'active':''" ng-click="toggleTpl('checkInsTpl')"><a href="#" style="color:black">Broj dolazaka</a></li>
             </ul>
             <div ng-include="currTpl"></div>
+
+            <div class="tavle-responsive" style="margin:0px 20px 50px 20px">
+                <table class="table table-condensed">
+                    <tr>
+                        <th>Usluga</th>
+                        <th>Opcija</th>
+                        <th class="text-right">Broj plaćenih usluga</th>
+                        <th class="text-right">Promet</th>
+                    </tr>
+                    <tr ng-repeat="x in clientsSrvicesCount">
+                        <td>{{x.service}}</td>
+                        <td>{{x.option}}</td>
+                        <td class="text-right">{{x.count}}</td>
+                        <td class="text-right">{{x.price | number:2}} {{config.currency}}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right"><strong>Ukupno: {{total.count}}</strong></td>
+                        <td class="text-right"><strong>{{total.price | number:2}} {{config.currency}}</strong></td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -62,6 +85,8 @@
                 chart-labels="labels" chart-series="series" chart-options="options"
                 chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>-->
     </div>
+
+
 </script>
 
 <script type="text/ng-template" id="checkInsTpl">

@@ -769,6 +769,7 @@
         } else {
             return "text-muted";
         }
+        if(x.isFreezed==true){return "text-primary"}
     }
 
     $scope.activeService = function (x) {
@@ -1096,24 +1097,32 @@
     }
 
     $scope.freezeServiceCtrl = function ($scope, $mdDialog, d, $http) {
-        $scope.d = d.service;
-        $scope.d.activationDate = new Date(d.service.activationDate);
-        $scope.d.expirationDate = new Date(d.service.expirationDate);
+        $scope.d = angular.copy(d.service);
+        $scope.d.isFreezed = true;
+        $scope.isFreezed = d.service.isFreezed;
+        $scope.d.activationDate = new Date($scope.d.activationDate);
+        $scope.d.expirationDate = new Date($scope.d.expirationDate);
         $scope.freezeDays = 14;
         $scope.cancel = function () {
             $mdDialog.cancel();
         };
 
         $scope.setNewDate = function () {
-            $scope.d.activationDate.setDate(d.service.activationDate.getDate() + $scope.freezeDays);
-            $scope.d.expirationDate.setDate(d.service.expirationDate.getDate() + $scope.freezeDays);
+            $scope.d.activationDate.setDate($scope.d.activationDate.getDate() + $scope.freezeDays);
+            $scope.d.expirationDate.setDate($scope.d.expirationDate.getDate() + $scope.freezeDays);
         };
 
         $scope.save = function () {
             $scope.setNewDate();
-            $scope.d.isFreezed = true;
             $mdDialog.hide($scope.d);
         }
+
+        $scope.freezeOf = function () {
+            $scope.d.isFreezed = false;
+            $scope.freezeDays = 0;
+        }
+
+
     };
 
     $scope.editService = function (x) {
@@ -1444,9 +1453,12 @@
         $scope.series = ['Kupljene usluge'];
         $scope.labels = [];
         $scope.data = [];
+        $scope.total = {count:0, price:0};
         angular.forEach($scope.clientsSrvicesCount, function (x, key) {
             $scope.labels.push(x.service + ', ' + x.option);
             $scope.data.push($scope.displayType == 0 ? x.count : x.price);
+            $scope.total.count += x.count;
+            $scope.total.price += x.price;
         });
 
         $scope.options = {

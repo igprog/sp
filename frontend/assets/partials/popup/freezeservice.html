@@ -13,10 +13,7 @@
                     <div class="col-lg-12 col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <b>Usluga</b>
-                            </div>
-                            <div class="panel-footer">
-                                <label>{{d.service}}</label>
+                                <strong>Usluga:</strong> {{d.service}}
                             </div>
                         </div>
                     </div>
@@ -50,7 +47,7 @@
                             <div class="panel-footer">
                                 <md-input-container>
                                     <label>Dana</label>
-                                    <input ng-model="freezeDays" type="number" min="0" />
+                                    <input ng-model="freezeDays" type="number" min="0" ng-disabled="d.isFreezed==false" />
                                 </md-input-container>
                             </div>
                         </div>
@@ -58,8 +55,11 @@
                 </div>
             </div>
             <div layout-gt-sm="row">
-                <md-button class="md-raised md-primary" ng-click="save()">Spremi</md-button>
-                <md-button class="md-raised md-default" ng-click="cancel()">Zatvori</md-button>
+                <md-button ng-if="isFreezed==true" class="md-raised md-primary" ng-click="freezeOf()">Odmrzni</md-button>
+                <div class="text-right">
+                    <md-button class="md-raised md-primary" ng-click="save()">Spremi</md-button>
+                    <md-button class="md-raised md-default" ng-click="cancel()">Zatvori</md-button>
+                </div>
             </div>
         </md-dialog-content>
     </form>

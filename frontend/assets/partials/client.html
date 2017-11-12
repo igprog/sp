@@ -121,7 +121,8 @@
                                                         <button ng-click="editService(x)" class="btn btn-default"><span class="fa fa-cogs" style="color:green"></span></button>
                                                     </td>
                                                     <td>
-                                                        <button ng-if="x.isFreezed==false" ng-click="freezeService(x)" class="btn btn-default"><span class="fa fa-snowflake-o" style="color:blue"></span></button>
+                                                        <button ng-click="freezeService(x)" class="btn btn-default"><span ng-if="x.isFreezed==true" class="fa fa-snowflake-o" style="color:blue"></span><span ng-if="x.isFreezed==false" class="fa fa-sun-o" style="background-color:yellow"></span></button>
+                                                        <!--<button ng-if="x.isFreezed==false" ng-click="freezeService(x)" class="btn btn-default"><span class="fa fa-snowflake-o" style="color:blue"></span></button>-->
                                                     </td>
                                                     <td>
                                                         <button ng-click="removeService(x)" class="btn btn-default"><span class="fa fa-remove" style="color:red"></span></button>
