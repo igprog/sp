@@ -1,0 +1,28 @@
+﻿<div class="" ng-controller="schedulerCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">Kalendar</h3>
+        </div>
+    </div>
+    <!--<button ng-click="showScheduler()" class="btn btn-primary">Test Scheduler</button>
+    <br />-->
+    <md-input-container>
+        <label>Sala</label>
+        <md-select ng-model="room" ng-change="getSchedulerByRoom()" >
+            <md-option ng-value="x.value" ng-repeat="x in rooms">
+                {{x.text}}
+            </md-option>
+        </md-select>
+    </md-input-container>
+
+    <div id="wrapper">
+        <div ng-if="room==1" id="myScheduler"></div>
+        <div ng-if="room==2" id="myScheduler"></div>
+        <div ng-if="room==3" id="myScheduler"></div>
+        <div ng-if="room==4" id="myScheduler"></div>
+        <div ng-if="room==5" id="myScheduler"></div>
+    </div>
+</div>
+
+
+

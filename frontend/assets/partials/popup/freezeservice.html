@@ -1,0 +1,66 @@
+﻿<md-dialog flex-md layout-margin>
+    <form ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Zamrzavanje usluge</h2>
+                <span flex></span>
+                <button ng-click="cancel()" class="btn btn-primary">x</button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <div class="row">
+                    <div class="col-lg-12 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>Usluga</b>
+                            </div>
+                            <div class="panel-footer">
+                                <label>{{d.service}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>Početak usluge</b>
+                            </div>
+                            <div class="panel-footer">
+                                <md-datepicker ng-model="d.activationDate" format="dd.MM.yyyy" md-open-on-focus></md-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>Istek usluge</b>
+                            </div>
+                            <div class="panel-footer">
+                                <md-datepicker ng-model="d.expirationDate" format="dd.MM.yyyy" md-open-on-focus></md-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>Zamrzni na</b>
+                            </div>
+                            <div class="panel-footer">
+                                <md-input-container>
+                                    <label>Dana</label>
+                                    <input ng-model="freezeDays" type="number" min="0" />
+                                </md-input-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div layout-gt-sm="row">
+                <md-button class="md-raised md-primary" ng-click="save()">Spremi</md-button>
+                <md-button class="md-raised md-default" ng-click="cancel()">Zatvori</md-button>
+            </div>
+        </md-dialog-content>
+    </form>
+</md-dialog>

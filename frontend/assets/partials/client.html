@@ -1,0 +1,292 @@
+﻿<div ng-controller="clientCtrl">
+    <h3>Član</h3>
+    <hr />
+    <div>
+        Datum aktivacije
+        <div>
+            <md-datepicker ng-model="client.activationDate" format="dd.MM.yyyy" md-open-on-focus></md-datepicker>
+        </div>
+    </div>
+    <div ng-if="showSaveMessage" class="footer navbar-fixed-top px5">
+        <div class="alert alert-success alert-dismissable text-center">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+            <strong>{{message}}</strong>
+        </div>
+    </div>
+
+    <div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row" style="padding-left:10px">
+                            <b>Osobni podaci<span class="radioValue"></span></b>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div layout-gt-sm="row">
+                            <md-input-container ng-if="client.clientId" class="md-block" flex-gt-sm>
+                                <label>Id</label>
+                                <input ng-model="client.clientId" type="text" disabled>
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>Ime</label>
+                                <input ng-model="client.firstName" type="text">
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>Prezime</label>
+                                <input ng-model="client.lastName">
+                            </md-input-container>
+                        </div>
+                        <div layout-gt-sm="row">
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>Email</label>
+                                <input name="email" ng-model="client.email" minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>Telefon</label>
+                                <input ng-model="client.phone">
+                            </md-input-container>
+                        </div>
+                        <div class="row">
+                            <md-dialog-actions layout="row">
+                                <md-button class="md-raised md-primary" ng-click="save(client)"><span class="fa fa-floppy-o"></span> Spremi</md-button>
+                                <md-button ng-if="client.clientId" class="md-raised md-accent" ng-click="remove(client)"><span class="fa fa-remove"></span> Briši</md-button>
+                                <md-button ng-if="showSaveMessage" class="md-raised md-warn" ng-click="newClient()"><span class="fa fa-user-plus"></span> Novi</md-button>
+                            </md-dialog-actions>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-if="client.clientId">
+            <div ng-if="servicesCount>0" class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row" style="padding-left:10px">
+                                <b>Kupljene usluge <span class="badge">{{servicesCount}}</span></b>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="row">
+                                <div class="panel-body">
+                                    <md-content class="md-padding">
+                                        <table class="table table-hover table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th>Usluga</th>
+                                                    <th>Opcija</th>
+                                                    <th>Broj dolazaka</th>
+                                                    <th>Jedinica</th>
+                                                    <th>Cijena</th>
+                                                    <th>Plaćeno</th>
+                                                    <th>Datum aktivacije</th>
+                                                    <th>Istek usluge</th>
+                                                    <th>Preostalo dolazaka</th>
+                                                    <th>Uredi</th>
+                                                    <th>Zamrzni</th>
+                                                    <th>Briši</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-class="inactiveServiceClass(x.expirationDate)" ng-repeat="x in clientServices">
+                                                    <td>{{x.service}}</td>
+                                                    <td>{{x.option}}</td>
+                                                    <td>{{ x.quantity > 10000 ? 'neograničeno' : x.quantity }}</td>
+                                                    <td>{{x.unit}}</td>
+                                                    <td>{{x.price}}</td>
+                                                    <td>
+                                                        <md-checkbox ng-model="x.isPaid" aria-label="" ng-change="updateService(x)">
+                                                            {{x.isPaid==true?'Da':'Ne'}}
+                                                        </md-checkbox>
+                                                    </td>
+                                                    <td>{{x.activationDate | date:'dd.MM.yyyy'}}</td>
+                                                    <td>{{x.expirationDate | date:'dd.MM.yyyy'}}</td>
+                                                    <td>
+                                                        <div class="progress text-center">
+                                                            <div ng-if="x.quantityLeft>0 && activeService(x.expirationDate) == true" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{(x.quantityLeft/x.quantity) * 100}}%">
+                                                                {{ x.quantityLeft > 10000 ? 'neograničeno' : x.quantityLeft }}
+                                                            </div>
+                                                            <div ng-if="x.quantityLeft==0" class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+                                                                {{x.quantityLeft}}
+                                                            </div>
+                                                            <div ng-if="x.quantityLeft>0 && activeService(x.expirationDate) == false" class="progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+                                                                <span style="color:White; font-size:small">0</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button ng-click="editService(x)" class="btn btn-default"><span class="fa fa-cogs" style="color:green"></span></button>
+                                                    </td>
+                                                    <td>
+                                                        <button ng-if="x.isFreezed==false" ng-click="freezeService(x)" class="btn btn-default"><span class="fa fa-snowflake-o" style="color:blue"></span></button>
+                                                    </td>
+                                                    <td>
+                                                        <button ng-click="removeService(x)" class="btn btn-default"><span class="fa fa-remove" style="color:red"></span></button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </md-content>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row" style="padding-left:10px">
+                                <b ng-if="!clientService.id">Nova usluga</b><b ng-if="clientService.id">Usluga Id: {{clientService.id}}</b>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <b>Početak usluge</b>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <md-datepicker ng-model="clientService.activationDate" format="dd.MM.yyyy" md-open-on-focus></md-datepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <b>Istek usluge</b>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <md-datepicker ng-model="clientService.expirationDate" format="dd.MM.yyyy" md-open-on-focus></md-datepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <b>Tip usluge</b>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <md-radio-group ng-model="clientService.service">
+                                                <md-radio-button ng-repeat="x in services" ng-value="x.service" aria-label="{{ x.service }}" ng-click="currentService($index)">
+                                                    {{ x.service }}
+                                                </md-radio-button>
+                                            </md-radio-group>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <b>Opcija</b>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <md-radio-group ng-model="clientService.option">
+                                                <md-radio-button ng-repeat="x in services[serviceIndex].options" ng-value="x.option" aria-label="{{ x.option }}" ng-click="currentOption($index)">
+                                                    {{ x.option }}
+                                                </md-radio-button>
+                                            </md-radio-group>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <b>Količina</b>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <md-radio-group ng-model="clientService.quantity">
+                                                <md-radio-button ng-repeat="x in services[serviceIndex].options[optionIndex].prices" ng-value="x.quantity" aria-label="{{ x.quantity }}" ng-click="currentPrice(x, $index)">
+                                                    {{ x.quantity > 10000 ? 'neograničeno' : x.quantity }}
+                                                    <span ng-model="clientService.unit"> {{x.unit}} </span>
+                                                    <span ng-model="clientService.price">
+                                                        ({{x.price}}kn/{{x.duration}}dan)
+                                                    </span>
+                                                </md-radio-button>
+                                            </md-radio-group>
+                                            <div style="margin-top:30px" ng-if="clientService.quantity > 0 && clientService.quantity < 10000">
+                                                <input ng-model="clientService.quantity" type="number" min="1" ng-change="changePrice(clientService.quantity, discount)"><span> {{clientService.unit}}</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <b>Cijena</b>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <input type="text" ng-model="price" ng-change="changePrice(clientService.quantity, discount)" /><span> kn</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <b>Popust</b>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <input type="number" min="0" ng-model="discount" ng-change="changePrice(clientService.quantity, discount)" /><span> %</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <b>Cijena ukupno</b>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <input type="text" ng-model="clientService.price" /><span> kn</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <b>Plaćeno</b>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <md-checkbox ng-model="clientService.isPaid" aria-label="">
+                                                {{clientService.isPaid==true?'Da':'Ne'}}
+                                            </md-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div ng-if="clientService.id" class="col-lg-4 col-md-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <b>Zamrzni uslugu</b>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <md-datepicker ng-model="clientService.expirationDate" format="dd.MM.yyyy"></md-datepicker>
+                                        </div>
+                                    </div>
+                                </div>-->
+                            </div>
+
+
+                            <!--{{clientService}}-->
+
+                            <div class="row">
+                                <md-dialog-actions layout="row">
+                                    <md-button class="md-raised md-primary" ng-click="saveClientService(clientService)"><span class="fa fa-floppy-o"></span> Spremi</md-button>
+                                </md-dialog-actions>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

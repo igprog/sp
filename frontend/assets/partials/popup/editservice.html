@@ -1,0 +1,119 @@
+﻿<md-dialog flex-lg layout-margin>
+    <form ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Detalji usluge</h2>
+                <span flex></span>
+                <button ng-click="cancel()" class="btn btn-primary">x</button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>Usluga</b>
+                            </div>
+                            <div class="panel-footer">
+                                <input type="text" ng-model="d.service" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>Opcija</b>
+                            </div>
+                            <div class="panel-footer">
+                                <input type="text" ng-model="d.option" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>Količina</b>
+                            </div>
+                            <div class="panel-footer">
+                                <input type="text" ng-model="d.quantity" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>Jedinica</b>
+                            </div>
+                            <div class="panel-footer">
+                                <input type="text" ng-model="d.unit" ng-value="d.quantity > 10000 ? 'neograničeno' : d.quantity" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>Početak usluge</b>
+                            </div>
+                            <div class="panel-footer">
+                                <md-datepicker ng-model="d.activationDate" format="dd.MM.yyyy" md-open-on-focus></md-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>Istek usluge</b>
+                            </div>
+                            <div class="panel-footer">
+                                <md-datepicker ng-model="d.expirationDate" format="dd.MM.yyyy" md-open-on-focus></md-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>Cijena</b>
+                            </div>
+                            <div class="panel-footer">
+                                <input type="text" ng-model="d.price" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>Plaćeno</b>
+                            </div>
+                            <div class="panel-footer">
+                                <md-checkbox ng-model="d.isPaid" aria-label="">
+                                    {{d.isPaid==true?'Da':'Ne'}}
+                                </md-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>Usluga je bila zamrznuta?</b>
+                            </div>
+                            <div class="panel-footer">
+                                <md-checkbox ng-model="d.isFreezed" aria-label="">
+                                    {{d.isFreezed==true?'Da':'Ne'}}
+                                </md-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div layout-gt-sm="row">
+                <md-button class="md-raised md-primary" ng-click="save()">Spremi</md-button>
+                <md-button class="md-raised md-default" ng-click="cancel()">Zatvori</md-button>
+            </div>
+        </md-dialog-content>
+    </form>
+</md-dialog>

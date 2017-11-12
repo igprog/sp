@@ -1,0 +1,25 @@
+﻿<div ng-controller="loginCtrl">
+    <div class="col-md-4 col-md-offset-2 well loginBox">
+        <h3 style="color:white">Prijava</h3>
+        <hr />
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+                <label style="color:white">Korisničko ime</label>
+                <input ng-model="userName" type="text" style="color:white">
+            </md-input-container>
+        </div>
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+                <label style="color:white">Lozinka</label>
+                <input ng-model="password" type="password" style="color:white">
+            </md-input-container>
+        </div>
+        <div class="form-group text-right">
+            <a href ng-click="login(userName, password)" class="btn btn-default"><span class="fa fa-key" aria-hidden="true"></span> Prijava</a>
+            <a href ng-click="login('igprog', 'Tel546360')" class="btn btn-default"><span class="fa fa-hand-o-right" aria-hidden="true"></span> Test</a>
+        </div>
+        <div ng-if="errorLogin" class="alert alert-danger">
+            <strong>Greška !</strong> {{errorMesage}}.
+        </div>
+    </div>
+</div>

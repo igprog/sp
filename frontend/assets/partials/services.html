@@ -1,0 +1,76 @@
+﻿<div ng-controller="servicesCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">Usluge</h3>
+        </div>
+    </div>
+    <div class="well">
+        <div ng-init="serviceIndex=$index" ng-repeat="x in services track by $index" class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <label class="col-sm-2 text-right">Usluga:</label>
+                    <div class="input-group col-sm-8">
+                        <input type="text" class="form-control" ng-model="x.service" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="removeService(x, $index)"><span style="color:red; font-weight:800">x</span><!--<span class="fa fa-remove" style="color:red"></span>--></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div ng-init="optionIndex=$index" ng-repeat="y in x.options track by $index" class="panel-body">
+                <div class="row">
+                    <label class="col-sm-2 text-right">Opcija:</label>
+
+                    <div class="input-group col-sm-8">
+                        <input type="text" class="form-control" ng-model="y.option" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" ng-click="removeOption(y, $parent.$index, $index)"><span style="color:red; font-weight:800">x</span></button>
+                        </span>
+                    </div>
+                </div>
+                <div ng-repeat="z in y.prices track by $index" class="row">
+                    <div class="col-sm-8 col-md-offset-2 table-responsive">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <td>Količina</td>
+                                    <td>Jedinica</td>
+                                    <td>Cijena</td>
+                                    <td>Trajanje (dana)</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="number" class="form-control" ng-model="z.quantity" /></td>
+                                    <td style="width:120px">
+                                        <select ng-model="z.unit" class="form-control">
+                                            <option ng-repeat="x in units track by $index" value="{{x}}">{{x}}</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="text" class="form-control" ng-model="z.price" /></td>
+                                    <td><input type="number" class="form-control" ng-model="z.duration" /></td>
+                                    <td><button class="btn btn-default" ng-click="removePrice(z, serviceIndex, $parent.$index, $index)"><span style="color:red; font-weight:800">x</span></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-offset-2">
+                        <button class="btn btn-default" ng-click="addPrice(serviceIndex, optionIndex)"><span class="fa fa-plus"></span> Nova cijena</button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <button class="btn btn-default" ng-click="addOption($index)"><span class="fa fa-plus"></span> Nova opcija</button>
+                <button class="btn btn-success" ng-click="saveServices()"><span class="fa fa-floppy-o"></span> Spremi</button>
+            </div>
+        </div>
+        <hr />
+        <div class="panel-default">
+            <button class="btn btn-primary" ng-click="addService()"><span class="fa fa-plus"></span> Nova usluga</button>
+            <button class="btn btn-success" ng-click="saveServices()"><span class="fa fa-floppy-o"></span> Spremi</button>
+        </div>
+    </div>
+
+</div>

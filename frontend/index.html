@@ -1,0 +1,111 @@
+﻿<html lang="en" >
+<head>
+    <title>Spartacus - App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!--CDN CSS-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--CSS-->
+    <link rel="stylesheet" href="assets/css/vendor/angular-material.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/sb-admin-2.css">
+    <!--JS-->
+    <script src="assets/js/vendor/jquery.min.js"></script>
+    <script src="assets/js/vendor/bootstrap.min.js"></script>
+    <script src="assets/js/vendor/angular.min.js"></script>
+    <script src="assets/js/vendor/angular-animate.min.js"></script>
+    <script src="assets/js/vendor/angular-aria.min.js"></script>
+    <script src="assets/js/vendor/angular-messages.min.js"></script>
+    <script src="assets/js/vendor/angular-material.min.js"></script>
+    <script src="assets/js/vendor/Chart.min.js"></script>
+    <script src="assets/js/vendor/angular-chart.min.js"></script>
+    <script src="assets/js/vendor/ngStorage.min.js"></script>
+    <script src="assets/js/vendor/aui-min.js"></script>
+    <script src="assets/js/vendor/moment.js"></script>
+    <script src="assets/js/vendor/ui-scheduler-event-recorder.js"></script>
+    <script src="assets/js/sb-admin-2.js"></script>
+
+    <script src="assets/js/vendor/moment.js"></script>
+    <script src="assets/js/vendor/ui-scheduler-event-recorder.js"></script>
+
+
+</head>
+<body ng-cloak ng-app="app" ng-controller="appCtrl">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0; background-color:#54534a; color: white">
+        <div class="navbar-header">
+            <button ng-if="isLogin" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{config.homepage}}" target="_blank" style="padding-top:5px !important"><img src="assets/img/logo.png"></a>
+        </div>
+        <!-- /.navbar-header -->
+        <ul ng-if="isLogin" class="nav navbar-top-links navbar-right text-right">
+            <li ng-if="loginUser.adminType==0" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-gears fa-fw"></i> <span class="hidden-xs">Postavke</span> <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li>
+                        <a href="#" ng-click="toggleTpl('assets/partials/services.html', 7)"><i class="fa fa-gear fa-fw"></i> Usluge</a>
+                    </li>
+                    <li>
+                        <a href="#" ng-click="toggleTpl('assets/partials/mailsettings.html', 7)"><i class="fa fa-envelope-o fa-fw"></i> E-mail postavke</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-user fa-fw"></i> <span class="hidden-xs">Korisnik: {{loginUser.firstName}} {{loginUser.lastName}}</span> <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li>
+                        <a href="#" ng-click="toggleTpl('assets/partials/user.html', 8)"><i class="fa fa-user fa-fw"></i> Korisnički profil</a>
+                    </li>
+                    <li ng-if="loginUser.adminType==0">
+                        <a href="#" ng-click="toggleTpl('assets/partials/users.html', 9)"><i class="fa fa-users fa-fw"></i>Evidencija korisnika</a>
+                    </li>
+                    <li ng-if="loginUser.adminType==0">
+                        <a href="#" ng-click="toggleTpl('assets/partials/singup.html', 10)"><i class="fa fa-user-plus fa-fw"></i> Novi korisnik</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href ng-click="logout()"><i class="fa fa-sign-out fa-fw"></i> <span class="hidden-xs">Logout</span></a>
+            </li>
+        </ul>
+        <!-- /.navbar-top-links -->
+        <div ng-if="isLogin" class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse vertical-nav">
+                <ul class="nav" id="side-menu" data-toggle="collapse" data-target=".navbar-collapse">
+                    <li ng-class="activeTab == 0 ? 'active' : ''"><a href="#" ng-click="toggleTpl('assets/partials/dashboard.html', 0)"><span class="fa fa-tachometer" aria-hidden="true"></span> Dashboard</a></li>
+                    <li ng-class="activeTab == 1 ? 'active' : ''"><a href="#" ng-click="toggleTpl('assets/partials/checkin.html', 1)"><span class="fa fa-check" aria-hidden="true"></span> Evidencija Dolazaka</a></li>
+                    <li ng-class="activeTab == 2 ? 'active' : ''"><a href="#" ng-click="toggleTpl('assets/partials/client.html', 2); newClient()"><span class="fa fa-user" aria-hidden="true"></span> Novi Član</a></li>
+                    <li ng-class="activeTab == 3 ? 'active' : ''"><a href="#" ng-click="toggleTpl('assets/partials/clients.html', 3)"> <span class="fa fa-users" aria-hidden="true"></span> Evidencija Članova</a></li>
+                    <li ng-class="activeTab == 4 ? 'active' : ''"><a href="#" ng-click="toggleTpl('assets/partials/scheduler.html', 4)"><span class="fa fa-calendar" aria-hidden="true"></span> Kalendar</a></li>
+                    <li ng-class="activeTab == 5 ? 'active' : ''"><a href="#" ng-click="toggleTpl('assets/partials/analytics.html', 5)"><span class="fa fa-bar-chart" aria-hidden="true"></span> Analitika</a></li>
+                    <li ng-class="activeTab == 6 ? 'active' : ''"><a href="#" ng-click="toggleTpl('assets/partials/messages.html', 6)"><span class="fa fa-envelope" aria-hidden="true"></span> Poruke</a></li>
+                    <li>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.sidebar-collapse -->
+        </div>
+        <!-- /.navbar-static-side -->
+    </nav>
+
+    <div id="page-wrapper" ng-include="currTpl" style="border:1px solid silver"></div>
+
+
+    <div class="text-right navbar-fixed-bottom" style="padding:5px 10px 0px 0px">
+        <a href="http://www.igprog.hr" target="_blank" class="text-muted small">&copy {{today | date:'yyyy'}} IG PROG</a>
+    </div>
+
+    <script src="assets/js/app.js"></script>
+
+</body>
+</html>

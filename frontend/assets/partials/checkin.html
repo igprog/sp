@@ -1,0 +1,64 @@
+﻿<div ng-cloak ng-controller="checkinCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">
+                Evidencija dolazaka
+                <span><md-datepicker ng-model="date" ng-change="getCheckInsByDate()" md-open-on-focus></md-datepicker></span>
+                <span class="badge">broj dolazaka: {{checkIns.length}}</span>
+            </h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3" style="margin:3px">
+            <select ng-model="checkIn.clientId" class="form-control" ng-change="GetActiveClientServices(checkIn.clientId)">
+                <option value="" disabled="disabled">Član...</option>
+                <option ng-repeat="x in clients" value="{{x.clientId}}">{{x.firstName}} {{x.lastName}}</option>
+            </select>
+        </div>
+        <div class="col-sm-3" style="margin:3px">
+            <select ng-model="activeService" class="form-control">
+                <option value="" disabled="disabled">Usluga...</option>
+                <option ng-repeat="x in activeServices" value="{{x}}">{{x.service}} ({{x.option}}) ({{ x.quantityLeft > 10000 ? 'neograničeno' : x.quantityLeft }})</option>
+            </select>
+        </div>
+        <div></div>
+        <div class="col-sm-3" style="margin:3px">
+            <button class="btn btn-success" ng-click="save()"><span class="fa fa-check"></span> PRIJAVI DOLAZAK</button>
+        </div>
+    </div>
+    <div class="table-responsive" style="margin-bottom:50px">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Br.</th>
+                    <th>Ime</th>
+                    <th>Prezime</th>
+                    <th>Usluga</th>
+                    <th>Prijava</th>
+                    <th>Odjava</th>
+                    <th>Dug</th>
+                    <th>Briši</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in checkIns" style="cursor:pointer" ng-class="checkOutClass(x)">
+                    <td ng-click="showClient(x)">{{checkIns.length - $index}}</td>
+                    <td ng-click="showClient(x)">{{x.firstName}}</td>
+                    <td ng-click="showClient(x)">{{x.lastName}}</td>
+                    <td ng-click="showClient(x)">{{x.service}}</td>
+                    <td ng-click="showClient(x)">{{x.checkInTime | date:'HH:mm'}}</td>
+                    <td>
+                        <button ng-if="x.isCheckOut==0" ng-click="checkOut(x)" class="btn btn-default"><span class="fa fa-sign-out" style="color:blue"></span></button>
+                        <span ng-if="x.isCheckOut==1">{{x.checkOutTime | date:'HH:mm'}}</span>
+                    </td>
+                    <td ng-click="showClient(x)">
+                        <span ng-class="x.isDebtor>0?'label label-danger':'hidden'">{{x.debt}} {{config.currency}}</span>
+                    </td>
+                    <td>
+                        <button ng-click="remove(x)" class="btn btn-default"><span class="fa fa-remove" style="color:red"></span></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+﻿<div ng-cloak ng-controller="clientCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">Članovi</h3>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom:20px">
+        <div class="col-sm-3">
+            Aktivni <span class="badge">{{clientsCount.activeClients}}</span>
+        </div>
+        <div class="col-sm-3">
+            Ukupno <span class="badge">{{clientsCount.totalClients}}</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <input ng-model="searchValue" type="text" class="form-control" placeholder="Pretraži..." />
+        </div>
+    </div>
+    <md-content class="md-padding">
+        <div class="table-responsive" style="margin-bottom:50px">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Ime i prezime</th>
+                        <th>Telefon</th>
+                        <th>Istek članarine</th>
+                        <th>Plaćeno</th>
+                        <th>Profil</th>
+                        <th>Briši</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-class="getDateDiff(x.dateTo) < 5 ? 'text-danger' : ''" ng-repeat="x in clients | filter:searchValue">
+                        <td ng-click="showClient(x)">{{x.clientId}}</td>
+                        <td ng-click="showClient(x)">{{x.firstName}} {{x.lastName}}</td>
+                        <td><a ng-if="x.phone" target="_blank" ng-href="tel:{{x.phone}}" class="text-primary"><i class="fa fa-phone"></i></a> <span> {{x.phone}}</span></td>
+                        <td>
+                        {{x.expirationService | date:'dd.MM.yyyy'}}
+                            <i ng-if="getDateDiff(x.expirationService)<=0" class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
+                            <i ng-if="getDateDiff(x.expirationService)>0" class="fa fa-check text-success" aria-hidden="true"></i>
+                        </td>
+                        <td ng-click="showClient(x)">
+                            <i ng-if="x.isDebtor==0" class="fa fa-check text-success" aria-hidden="true"></i>
+                            <i ng-if="x.isDebtor>0" class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
+                        </td>
+                        <td>
+                            <button ng-click="showClient(x)" class="btn btn-default"><span class="fa fa-cogs" style="color:green"></span></button>
+                        </td>
+                        <td>
+                            <button ng-click="remove(x)" class="btn btn-default"><span class="fa fa-remove" style="color:red"></span></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </md-content>
+</div>

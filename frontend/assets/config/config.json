@@ -1,0 +1,7 @@
+﻿{
+  "backend": "http://localhost:49490/",
+  "title": "Spartacus - App",
+  "homepage": "https://www.spartacus.hr",
+  "sitename": "spartacus",
+  "currency":  "kn"
+}
