@@ -95,7 +95,7 @@ public class Clients : System.Web.Services.WebService {
             try {
                 connection.Open();
                 string sql = @"INSERT INTO Clients VALUES  
-                       (@FirstName, @LastName, @Email, @Phone, @ActivationDate, @IsActive)";
+                       (@FirstName, @LastName, @Email, @Phone, @ActivationDate, @IsActive, @Note)";
                 SqlCommand command = new SqlCommand(sql, connection);
                 command.Parameters.Add(new SqlParameter("FirstName", client.firstName));
                 command.Parameters.Add(new SqlParameter("LastName", client.lastName));
