@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 [System.Web.Script.Services.ScriptService]
 public class ClientServices : System.Web.Services.WebService {
     SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString);
+    int timeDiff = Convert.ToInt32(ConfigurationManager.AppSettings["ServerHostTimeDifference"]);
 
     public ClientServices() {
     }
@@ -73,8 +74,8 @@ public class ClientServices : System.Web.Services.WebService {
                 quantity = reader.GetValue(4) == DBNull.Value ? 0 : reader.GetInt32(4),
                 unit = reader.GetValue(5) == DBNull.Value ? "" : reader.GetString(5),
                 price = reader.GetValue(6) == DBNull.Value ? "" : reader.GetString(6),
-                activationDate = reader.GetValue(7) == DBNull.Value ? DateTime.UtcNow : reader.GetDateTime(7),
-                expirationDate = reader.GetValue(8) == DBNull.Value ? DateTime.UtcNow : reader.GetDateTime(8),
+                activationDate = reader.GetValue(7) == DBNull.Value ? DateTime.UtcNow : reader.GetDateTime(7).AddHours(timeDiff),
+                expirationDate = reader.GetValue(8) == DBNull.Value ? DateTime.UtcNow : reader.GetDateTime(8).AddHours(timeDiff),
                 quantityLeft = reader.GetValue(9) == DBNull.Value ? 0 : reader.GetInt32(9),
                 isPaid = Convert.ToBoolean(reader.GetInt32(10)),
                 isFreezed = Convert.ToBoolean(reader.GetInt32(11))
@@ -169,8 +170,8 @@ public class ClientServices : System.Web.Services.WebService {
                     quantity = reader.GetValue(4) == DBNull.Value ? 0 : reader.GetInt32(4),
                     unit = reader.GetValue(5) == DBNull.Value ? "" : reader.GetString(5),
                     price = reader.GetValue(6) == DBNull.Value ? "" : reader.GetString(6),
-                    activationDate = reader.GetValue(7) == DBNull.Value ? DateTime.UtcNow : reader.GetDateTime(7),
-                    expirationDate = reader.GetValue(8) == DBNull.Value ? DateTime.UtcNow.AddDays(31) : reader.GetDateTime(8),
+                    activationDate = reader.GetValue(7) == DBNull.Value ? DateTime.UtcNow : reader.GetDateTime(7).AddHours(timeDiff),
+                    expirationDate = reader.GetValue(8) == DBNull.Value ? DateTime.UtcNow.AddDays(31) : reader.GetDateTime(8).AddHours(timeDiff),
                     quantityLeft = reader.GetValue(9) == DBNull.Value ? 0 : reader.GetInt32(9),
                     isPaid = Convert.ToBoolean(reader.GetInt32(10)),
                     isFreezed = Convert.ToBoolean(reader.GetInt32(11))
@@ -203,8 +204,8 @@ public class ClientServices : System.Web.Services.WebService {
                     quantity = reader.GetValue(4) == DBNull.Value ? 0 : reader.GetInt32(4),
                     unit = reader.GetValue(5) == DBNull.Value ? "" : reader.GetString(5),
                     price = reader.GetValue(6) == DBNull.Value ? "" : reader.GetString(6),
-                    activationDate = reader.GetValue(7) == DBNull.Value ? DateTime.UtcNow : reader.GetDateTime(7),
-                    expirationDate = reader.GetValue(8) == DBNull.Value ? DateTime.UtcNow.AddDays(31) : reader.GetDateTime(8),
+                    activationDate = reader.GetValue(7) == DBNull.Value ? DateTime.UtcNow : reader.GetDateTime(7).AddHours(timeDiff),
+                    expirationDate = reader.GetValue(8) == DBNull.Value ? DateTime.UtcNow.AddDays(31) : reader.GetDateTime(8).AddHours(timeDiff),
                     quantityLeft = reader.GetValue(9) == DBNull.Value ? 0 : reader.GetInt32(9),
                     isPaid = Convert.ToBoolean(reader.GetInt32(10)),
                     isFreezed = Convert.ToBoolean(reader.GetInt32(11))

@@ -59,7 +59,7 @@ public class Clients : System.Web.Services.WebService {
                         LEFT OUTER JOIN ClientServices AS cs
                         ON c.ClientId = cs.ClientId AND cs.IsPaid = 0
                         LEFT OUTER JOIN ClientServices AS cs1
-                        ON c.ClientId = cs1.ClientId AND cs1.ExpirationDate >= GETDATE()
+                        ON c.ClientId = cs1.ClientId
                         GROUP BY c.ClientId, c.FirstName, c.LastName, c.Email, c.Phone, c.ActivationDate, c.IsActive, cs1.ExpirationDate, c.Note
                         ORDER BY cs1.ExpirationDate DESC";
             SqlCommand command = new SqlCommand(sql, connection);
